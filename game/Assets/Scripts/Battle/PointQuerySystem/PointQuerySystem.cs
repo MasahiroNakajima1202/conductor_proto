@@ -2,27 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Commander.Battle
+namespace Commander.Battle.AI
 {
     public class PointQuerySystem : MonoBehaviour
     {
-        // Use this for initialization
-        void Awake()
+        [SerializeField]
+        Generator generator;
+
+        [SerializeField]
+        Filter[] filters;
+
+        [SerializeField]
+        Scorer scorers;
+
+        Vector3 currentDestination;
+
+        public void UpdateState()
+        { }
+
+        public Vector3 GetDestination()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            return currentDestination;
         }
     }
 
     public class ScoreingPoint
     {
-        float score;
+        public float Score;
 
-        Vector3 position;
+        public Vector3 position;
     }
 }

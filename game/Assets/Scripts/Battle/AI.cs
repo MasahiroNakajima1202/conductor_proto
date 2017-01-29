@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Commander.Battle
+namespace Commander.Battle.AI
 {
     public class AI : MonoBehaviour
     {
