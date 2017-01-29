@@ -7,8 +7,17 @@ namespace Commander.Battle
 {
     public class AIActor : Actor
     {
-        public void AttachAI()
-        { }
+        [SerializeField]
+        BattleAI ai;
+
+        /// <summary>
+        /// 使い道ない……？
+        /// </summary>
+        /// <param name="ai"></param>
+        public void AttachAI(BattleAI ai)
+        {
+            this.ai = ai;
+        }
 
         // Use this for initialization
         protected override void Awake()
@@ -19,7 +28,10 @@ namespace Commander.Battle
         // Update is called once per frame
         protected override void Update()
         {
-
+            if (ai != null)
+            {
+                ai.UpdateState();
+            }
         }
     }
 }
