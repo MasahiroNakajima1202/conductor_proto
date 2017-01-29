@@ -6,6 +6,9 @@ namespace Commander.Battle.AI
 {
     public abstract class Generator : MonoBehaviour
     {
+        [SerializeField]
+        protected GameObject owner;
+
         public abstract ScoreingPoint[] Generate();
     }
 }

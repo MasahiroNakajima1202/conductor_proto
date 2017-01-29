@@ -28,8 +28,8 @@ namespace Commander.Battle.AI
 
     public class ScoreingPoint
     {
-        float score;
+        public float Score;
 
-        Vector3 position;
+        public Vector3 position;
     }
 }
