@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Commander.Battle
+namespace Commander.Battle.AI
 {
-    public class Generator : MonoBehaviour
+    public abstract class Generator : MonoBehaviour
     {
-        
+        public abstract ScoreingPoint[] Generate();
     }
 }
