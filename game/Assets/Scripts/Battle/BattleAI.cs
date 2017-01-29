@@ -6,6 +6,9 @@ namespace Commander.Battle.AI
 {
     public class BattleAI : MonoBehaviour
     {
+        [SerializeField]
+        Strategy[] strategies;
+
         public void LoadFromFile(string filename)
         { }
 

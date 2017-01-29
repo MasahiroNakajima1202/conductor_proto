@@ -4,13 +4,15 @@ using UnityEngine;
 
 namespace Commander.Battle.AI
 {
-    public class Strategy
+    public class Strategy : MonoBehaviour
     {
-        public Strategy()
-        {
-        }
+        [SerializeField]
+        BattleAction action;
 
-        public void Update() { }
+        [SerializeField]
+        PointQuerySystem pqs;
+
+        public void UpdateState() { }
 
         public BattleAction GetBattleAction()
         {

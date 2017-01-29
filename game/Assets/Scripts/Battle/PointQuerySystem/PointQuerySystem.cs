@@ -13,7 +13,7 @@ namespace Commander.Battle.AI
         Filter[] filters;
 
         [SerializeField]
-        Scorer scorers;
+        Scorer[] scorers;
 
         Vector3 currentDestination;
 
