@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Commander.Battle.AI
 {
-    public class AI : MonoBehaviour
+    public class BattleAI : MonoBehaviour
     {
         public void LoadFromFile(string filename)
         { }
