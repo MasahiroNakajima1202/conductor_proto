@@ -10,21 +10,42 @@ namespace Commander.Battle.AI
         {
             PreProcess();
 
+            bool[] activeArray = new bool[pointArray.Length];
+            int count = 0;
             for (int i = 0; i < pointArray.Length; i++)
             {
                 ScoreingPoint point = pointArray[i];
-                ApplyToPoint(point);
+                activeArray[i] = Check(point);
+                if (activeArray[i])
+                {
+                    count++;
+                }
             }
 
-            return pointArray;
+            ScoreingPoint[] newArray = new ScoreingPoint[count];
+
+            int index = 0;
+            for (int i = 0; i < pointArray.Length; i++)
+            {
+                if (!activeArray[i])
+                {
+                    continue;
+                }
+
+                newArray[index] = pointArray[i];
+                index++;
+            }
+
+            return newArray;
         }
 
         protected virtual void PreProcess()
         {
         }
 
-        protected virtual void ApplyToPoint(ScoreingPoint point)
+        protected virtual bool Check(ScoreingPoint point)
         {
+            return true;
         }
     }
 }
