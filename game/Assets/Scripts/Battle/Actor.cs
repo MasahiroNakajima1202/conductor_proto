@@ -6,6 +6,15 @@ namespace Commander.Battle
 {
     public class Actor : MonoBehaviour
     {
+        public enum BattleGroup
+        {
+            Party,
+            Troop,
+            Neutral,
+        }
+
+        [SerializeField]
+        BattleGroup group;
 
         public void Damage()
         { }
