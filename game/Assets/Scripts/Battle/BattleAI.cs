@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Commander.Battle.AI
@@ -8,6 +9,9 @@ namespace Commander.Battle.AI
     {
         [SerializeField]
         Strategy[] strategies;
+
+        [SerializeField, Space(10)]
+        StrategySet[] strategySelection;
 
         public void LoadFromFile(string filename)
         { }
@@ -39,5 +43,22 @@ namespace Commander.Battle.AI
 
         void UpdatePQS()
         { }
+    }
+
+    [Serializable]
+    public struct StrategySet
+    {
+        public Strategy Strategy;
+        public WeihtedStrategyScorer[] Scorer;
+    }
+
+    [Serializable]
+    public struct WeihtedStrategyScorer
+    {
+        public StrategyScorer Scorer;
+        [Range(0.0f, 1.0f)]
+        public float Weight;
+        [Range(0.0f, 1.0f)]
+        public float ScoreView;
     }
 }
