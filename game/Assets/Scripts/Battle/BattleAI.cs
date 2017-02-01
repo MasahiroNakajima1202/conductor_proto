@@ -13,6 +13,8 @@ namespace Commander.Battle.AI
         [SerializeField, Space(10)]
         StrategySet[] strategySelection;
 
+        StrategySet currentStrategySet;
+
         public void LoadFromFile(string filename)
         { }
 
@@ -39,7 +41,47 @@ namespace Commander.Battle.AI
         }
 
         void SelectStrategy()
-        { }
+        {
+            if (strategySelection == null)
+            {
+                return;
+            }
+
+            if (strategySelection.Length == 0)
+            {
+                return;
+            }
+
+            Debug.Log(transform.parent.gameObject.name);
+
+            float maxScore = 0.0f;
+            currentStrategySet = strategySelection[0];
+            for (int i = 0; i < strategySelection.Length; i++)
+            {
+                StrategySet target = strategySelection[i];
+                float scoreSum = 0.0f;
+                for (int j = 0; j < target.Scorer.Length; j++)
+                {
+                    WeightedStrategyScorer weightedScorer = target.Scorer[j];
+                    float score = weightedScorer.Scorer.Score();
+                    scoreSum += score * weightedScorer.Weight;
+                }
+
+                if (maxScore < scoreSum)
+                {
+                    currentStrategySet = target;
+                    maxScore = scoreSum;
+                }
+            }
+
+            for (int i = 0; i < strategySelection.Length; i++)
+            {
+                StrategySet target = strategySelection[i];
+                target.Strategy.gameObject.SetActive(false);
+            }
+
+            currentStrategySet.Strategy.gameObject.SetActive(true);
+        }
 
         void UpdatePQS()
         { }
@@ -49,16 +91,14 @@ namespace Commander.Battle.AI
     public struct StrategySet
     {
         public Strategy Strategy;
-        public WeihtedStrategyScorer[] Scorer;
+        public WeightedStrategyScorer[] Scorer;
     }
 
     [Serializable]
-    public struct WeihtedStrategyScorer
+    public struct WeightedStrategyScorer
     {
         public StrategyScorer Scorer;
-        [Range(0.0f, 1.0f)]
+        [Range(-10.0f, 10.0f)]
         public float Weight;
-        [Range(0.0f, 1.0f)]
-        public float ScoreView;
     }
 }

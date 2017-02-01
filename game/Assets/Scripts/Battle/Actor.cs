@@ -16,6 +16,11 @@ namespace Commander.Battle
         [SerializeField]
         BattleGroup group;
 
+        public BattleGroup Group
+        {
+            get { return group; }
+        }
+
         public void Damage()
         { }
 
