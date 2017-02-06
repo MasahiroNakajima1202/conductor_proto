@@ -18,7 +18,15 @@ namespace Commander.Battle.AI
         Vector3 currentDestination;
 
         public void UpdateState()
-        { }
+        {
+            var pointArray = generator.Generate();
+
+            for (int i = 0; i < pointArray.Length; i++)
+            {
+                var point = pointArray[i];
+                MyDebug.ShowSphere(point.position, Color.red);
+            }
+        }
 
         public Vector3 GetDestination()
         {

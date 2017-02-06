@@ -52,8 +52,6 @@ namespace Commander.Battle.AI
                 return;
             }
 
-            Debug.Log(transform.parent.gameObject.name);
-
             float maxScore = 0.0f;
             currentStrategySet = strategySelection[0];
             for (int i = 0; i < strategySelection.Length; i++)
@@ -84,7 +82,11 @@ namespace Commander.Battle.AI
         }
 
         void UpdatePQS()
-        { }
+        {
+            PointQuerySystem pqs = currentStrategySet.Strategy.PQS;
+
+            pqs.UpdateState();
+        }
     }
 
     [Serializable]

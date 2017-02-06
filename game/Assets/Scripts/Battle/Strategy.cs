@@ -12,6 +12,11 @@ namespace Commander.Battle.AI
         [SerializeField]
         PointQuerySystem pqs;
 
+        public PointQuerySystem PQS
+        {
+            get { return pqs; }
+        }
+
         public void UpdateState() { }
 
         public BattleAction GetBattleAction()
