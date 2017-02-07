@@ -10,10 +10,12 @@ namespace Commander.Battle.AI
         [SerializeField]
         Strategy[] strategies;
 
-        [SerializeField, Space(10)]
-        StrategySet[] strategySelection;
+        [SerializeField]
+        GameObject scorer;
 
-        StrategySet currentStrategySet;
+        Strategy currentStrategy;
+
+        StrategyScorer[] ScorerArray;
 
         public void LoadFromFile(string filename)
         { }
@@ -42,65 +44,38 @@ namespace Commander.Battle.AI
 
         void SelectStrategy()
         {
-            if (strategySelection == null)
+            if (ScorerArray == null)
             {
                 return;
             }
 
-            if (strategySelection.Length == 0)
+            if (ScorerArray.Length == 0)
             {
                 return;
             }
 
             float maxScore = 0.0f;
-            currentStrategySet = strategySelection[0];
-            for (int i = 0; i < strategySelection.Length; i++)
-            {
-                StrategySet target = strategySelection[i];
-                float scoreSum = 0.0f;
-                for (int j = 0; j < target.Scorer.Length; j++)
-                {
-                    WeightedStrategyScorer weightedScorer = target.Scorer[j];
-                    float score = weightedScorer.Scorer.Score();
-                    scoreSum += score * weightedScorer.Weight;
-                }
+            // ScorerArrayを全部評価して最大のものをサーチ dictionaryでstrategyごとの評価値を管理するのがよさげ ここから
 
-                if (maxScore < scoreSum)
-                {
-                    currentStrategySet = target;
-                    maxScore = scoreSum;
-                }
+            for (int i = 0; i < strategies.Length; i++)
+            {
+                Strategy target = strategies[i];
+                target.gameObject.SetActive(false);
             }
 
-            for (int i = 0; i < strategySelection.Length; i++)
-            {
-                StrategySet target = strategySelection[i];
-                target.Strategy.gameObject.SetActive(false);
-            }
-
-            currentStrategySet.Strategy.gameObject.SetActive(true);
+            // currentStrategyWeight.Strategy.gameObject.SetActive(true);
         }
 
         void UpdatePQS()
         {
-            PointQuerySystem pqs = currentStrategySet.Strategy.PQS;
+            PointQuerySystem pqs = currentStrategy.PQS;
 
             pqs.UpdateState();
         }
-    }
 
-    [Serializable]
-    public struct StrategySet
-    {
-        public Strategy Strategy;
-        public WeightedStrategyScorer[] Scorer;
-    }
-
-    [Serializable]
-    public struct WeightedStrategyScorer
-    {
-        public StrategyScorer Scorer;
-        [Range(-10.0f, 10.0f)]
-        public float Weight;
+        private void Awake()
+        {
+            ScorerArray = scorer.GetComponents<StrategyScorer>();
+        }
     }
 }

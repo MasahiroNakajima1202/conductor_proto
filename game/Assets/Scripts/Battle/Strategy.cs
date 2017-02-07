@@ -6,10 +6,8 @@ namespace Commander.Battle.AI
 {
     public class Strategy : MonoBehaviour
     {
-        [SerializeField]
         BattleAction action;
 
-        [SerializeField]
         PointQuerySystem pqs;
 
         public PointQuerySystem PQS
@@ -33,5 +31,11 @@ namespace Commander.Battle.AI
         {
             return false;
         }
+
+        private void Awake()
+        {
+            action = GetComponent<BattleAction>();
+            pqs = GetComponent<PointQuerySystem>();
+        } 
     }
 }
