@@ -19,12 +19,18 @@ namespace Commander.Battle.AI
 
         public void UpdateState()
         {
-            if (generator == null)
-            {
-                return;
-            }
+            // generate phase
+            if (generator == null){ return; }
 
             var pointArray = generator.Generate();
+
+            // filtering phase
+            if (filters == null) { return; }
+            for (int i = 0; i < filters.Length; i++)
+            {
+                Filter filter = filters[i];
+                pointArray = filter.Apply(pointArray);
+            }
 
             for (int i = 0; i < pointArray.Length; i++)
             {

@@ -6,6 +6,9 @@ namespace Commander.Battle.AI
 {
     public abstract class Filter : MonoBehaviour
     {
+        [SerializeField]
+        protected AIActor owner;
+
         public ScoreingPoint[] Apply(ScoreingPoint[] pointArray)
         {
             PreProcess();
