@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Commander.Battle.AI
@@ -54,8 +55,43 @@ namespace Commander.Battle.AI
                 return;
             }
 
+            // 全strategyに大して評価値を決定
+            Dictionary<Strategy, float> scoreMap = scoreMap = strategies.ToDictionary(st => st, st => 0.0f);
+            for (int i = 0; i < ScorerArray.Length; i++)
+            {
+                StrategyScorer scorer = ScorerArray[i];
+                float score = scorer.Score();
+                StrategyWeight[] weightArray = scorer.StrategyWeightArray;
+                for (int j = 0; j < weightArray.Length; j++)
+                {
+                    StrategyWeight weight = weightArray[j];
+                    if (!scoreMap.ContainsKey(weight.Strategy))
+                    {
+                        continue;
+                    }
+
+                    scoreMap[weight.Strategy] += score * weight.Weight;
+                }
+            }
+
+            // 全strategyに対して最大スコアのものを選出
             float maxScore = 0.0f;
-            // ScorerArrayを全部評価して最大のものをサーチ dictionaryでstrategyごとの評価値を管理するのがよさげ ここから
+            Strategy strategyOfMax = null;
+            for (int i = 0; i < strategies.Length; i++)
+            {
+                Strategy strategy = strategies[i];
+                float score = scoreMap[strategy];
+                if (score > maxScore)
+                {
+                    maxScore = score;
+                    strategyOfMax = strategy;
+                }
+            }
+
+            if (strategyOfMax != null)
+            {
+                currentStrategy = strategyOfMax;
+            }
 
             for (int i = 0; i < strategies.Length; i++)
             {
@@ -63,7 +99,7 @@ namespace Commander.Battle.AI
                 target.gameObject.SetActive(false);
             }
 
-            // currentStrategyWeight.Strategy.gameObject.SetActive(true);
+            currentStrategy.gameObject.SetActive(true);
         }
 
         void UpdatePQS()
@@ -76,6 +112,11 @@ namespace Commander.Battle.AI
         private void Awake()
         {
             ScorerArray = scorer.GetComponents<StrategyScorer>();
+
+            if (strategies.Length > 0)
+            {
+                currentStrategy = strategies[0];
+            }
         }
     }
 }

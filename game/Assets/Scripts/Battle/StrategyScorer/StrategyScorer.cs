@@ -10,6 +10,11 @@ namespace Commander.Battle.AI
         [SerializeField]
         StrategyWeight[] strategyWeightArray;
 
+        public StrategyWeight[] StrategyWeightArray
+        {
+            get { return strategyWeightArray; }
+        }
+
         public virtual float Score()
         {
             return 0.0f;

@@ -19,6 +19,11 @@ namespace Commander.Battle.AI
 
         public void UpdateState()
         {
+            if (generator == null)
+            {
+                return;
+            }
+
             var pointArray = generator.Generate();
 
             for (int i = 0; i < pointArray.Length; i++)
