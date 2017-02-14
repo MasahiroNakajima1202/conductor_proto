@@ -32,10 +32,41 @@ namespace Commander.Battle.AI
                 pointArray = filter.Apply(pointArray);
             }
 
+            // scoring phase
+            if (scorers == null) { return; }
+            for (int i = 0; i < scorers.Length; i++)
+            {
+                Scorer scorer = scorers[i];
+                pointArray = scorer.Apply(pointArray);
+            }
+
+            // decide destination
+            float maxScore = 0.0f;
+            int indexOfMax = -1;
+            for (int i = 0; i < pointArray.Length; i++)
+            {
+                ScoreingPoint point = pointArray[i];
+                if (point.Score > maxScore)
+                {
+                    indexOfMax = i;
+                    maxScore = point.Score;
+                }
+            }
+
+            if (indexOfMax >= 0)
+            {
+                currentDestination = pointArray[indexOfMax].position;
+            }
+            else
+            {
+                currentDestination = transform.position;
+            }
+
             for (int i = 0; i < pointArray.Length; i++)
             {
                 var point = pointArray[i];
-                MyDebug.ShowSphere(point.position, Color.red);
+                Color color = new Color(point.Score, 0.0f, 1.0f - point.Score, 1.0f);
+                MyDebug.ShowSphere(point.position, color);
             }
         }
 
