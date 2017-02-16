@@ -15,7 +15,7 @@ namespace Commander.Battle.AI
         [SerializeField]
         Scorer[] scorers;
 
-        Vector3 currentDestination;
+        public Vector3 CurrentDestination { get; private set; }
 
         public void UpdateState()
         {
@@ -55,11 +55,11 @@ namespace Commander.Battle.AI
 
             if (indexOfMax >= 0)
             {
-                currentDestination = pointArray[indexOfMax].position;
+                CurrentDestination = pointArray[indexOfMax].position;
             }
             else
             {
-                currentDestination = transform.position;
+                CurrentDestination = transform.position;
             }
 
             for (int i = 0; i < pointArray.Length; i++)
@@ -72,7 +72,7 @@ namespace Commander.Battle.AI
 
         public Vector3 GetDestination()
         {
-            return currentDestination;
+            return CurrentDestination;
         }
     }
 

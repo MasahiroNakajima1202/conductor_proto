@@ -9,6 +9,9 @@ namespace Commander.Battle.AI
     public class BattleAI : MonoBehaviour
     {
         [SerializeField]
+        AIActor owner;
+
+        [SerializeField]
         Strategy[] strategies;
 
         [SerializeField]
@@ -23,8 +26,13 @@ namespace Commander.Battle.AI
 
         public void UpdateState()
         {
+            if (owner == null) { return; }
+
             SelectStrategy();
             UpdatePQS();
+
+            // FIXME: 位置が近いようならアクションを取る
+            owner.WalkTo(currentStrategy.PQS.CurrentDestination);
         }
 
         public bool ReadyToAction()
@@ -105,7 +113,6 @@ namespace Commander.Battle.AI
         void UpdatePQS()
         {
             PointQuerySystem pqs = currentStrategy.PQS;
-
             pqs.UpdateState();
         }
 

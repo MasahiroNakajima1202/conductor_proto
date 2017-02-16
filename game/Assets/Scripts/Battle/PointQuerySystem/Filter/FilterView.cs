@@ -22,12 +22,7 @@ namespace Commander.Battle.AI
         {
             if (owner == null) { return; }
 
-            Vector3 tempFront = new Vector3(0.0f, 0.0f, 1.0f);
-            Matrix4x4 worldMatrix = owner.transform.localToWorldMatrix;
-            tempFront = worldMatrix.MultiplyVector(tempFront);
-            tempFront.y = 0.0f;
-            tempFront.Normalize();
-            front = tempFront;
+            front = owner.GetFrontVector();
 
             lowerThreshold = Mathf.Cos(minDegree * Mathf.Deg2Rad);
             upperThreshold = Mathf.Cos(maxDegree * Mathf.Deg2Rad);
