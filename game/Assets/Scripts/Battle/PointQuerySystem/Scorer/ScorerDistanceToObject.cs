@@ -31,8 +31,6 @@ namespace Commander.Battle.AI
             float delta = Mathf.Abs(distance - toPointDistance);
             float score = 1.0f - Mathf.Clamp01(delta / range);
             point.Score += score;
-
-            Debug.Log(score.ToString() + "めう");
         }
     }
 }
