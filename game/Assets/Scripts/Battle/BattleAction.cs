@@ -4,25 +4,25 @@ using UnityEngine;
 
 namespace Commander.Battle
 {
-    public class BattleAction
+    public class BattleAction : MonoBehaviour
     {
-        public BattleAction()
-        { }
+        Actor actor;
 
-        public void Update()
+        public virtual void UpdateState()
         {
         }
 
-        public bool IsFinished()
+        public virtual bool IsFinished()
         {
             return false;
         }
 
-        public void Reset()
+        public virtual void Reset()
         { }
 
-        public void Start(Actor actor)
+        public virtual void Run(Actor actor)
         {
+            this.actor = actor;
         }
     }
 }

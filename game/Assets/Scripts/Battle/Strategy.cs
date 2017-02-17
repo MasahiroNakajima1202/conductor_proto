@@ -4,13 +4,18 @@ using UnityEngine;
 
 namespace Commander.Battle.AI
 {
-    public class Strategy
+    public class Strategy : MonoBehaviour
     {
-        public Strategy()
+        BattleAction action;
+
+        PointQuerySystem pqs;
+
+        public PointQuerySystem PQS
         {
+            get { return pqs; }
         }
 
-        public void Update() { }
+        public void UpdateState() { }
 
         public BattleAction GetBattleAction()
         {
@@ -26,5 +31,11 @@ namespace Commander.Battle.AI
         {
             return false;
         }
+
+        private void Awake()
+        {
+            action = GetComponent<BattleAction>();
+            pqs = GetComponent<PointQuerySystem>();
+        } 
     }
 }

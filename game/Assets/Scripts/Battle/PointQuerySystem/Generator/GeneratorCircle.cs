@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Commander.Battle.AI
 {
-    public abstract class GeneratorCircle : Generator
+    public class GeneratorCircle : Generator
     {
         [SerializeField]
         float radius;
@@ -13,7 +13,7 @@ namespace Commander.Battle.AI
         int radiusDivision;
 
         [SerializeField]
-        float rangeRadian;
+        float rangePiRadian;
 
         [SerializeField]
         int rangeDivision;
@@ -25,20 +25,25 @@ namespace Commander.Battle.AI
             int pointNum = (rangeDivision + 1) * radiusDivision + 1;
             ScoreingPoint[] array = new ScoreingPoint[pointNum];
 
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = new ScoreingPoint();
+            }
+
             // from inner
             array[0].position = owner.transform.position;
 
             float radiusStride = radius / (float)radiusDivision;
-            float rangeStride = 2.0f * rangeRadian / (float)rangeDivision;
+            float rangeStride = 2.0f * rangePiRadian * Mathf.PI / (float)rangeDivision;
             float pointRadius = radiusStride;
             for (int radiusIndex = 1; radiusIndex <= radiusDivision; radiusIndex++)
             {
-                float pointRange = -rangeRadian;
+                float pointRange = -rangePiRadian * Mathf.PI;
                 for (int rangeIndex = 0; rangeIndex <= rangeDivision; rangeIndex++)
                 {
                     Vector3 basePosition = owner.transform.position;
                     Vector3 offset = Vector3.zero;
-                    Vector3 front = new Vector3(0.0f, 0.0f, -1.0f);
+                    Vector3 front = new Vector3(0.0f, 0.0f, 1.0f);
 
                     offset.x = Mathf.Cos(pointRange) * front.x - Mathf.Sin(pointRange) * front.z;
                     offset.z = Mathf.Sin(pointRange) * front.x + Mathf.Cos(pointRange) * front.z;
@@ -47,7 +52,7 @@ namespace Commander.Battle.AI
                     // FIXME: fix to ground
                     offset.y = 0.0f;
 
-                    int index = radiusIndex * (rangeDivision + 1) + rangeIndex + 1;
+                    int index = (radiusIndex - 1) * (rangeDivision + 1) + rangeIndex + 1;
                     ScoreingPoint point = array[index];
                     point.position = basePosition + offset;
 
