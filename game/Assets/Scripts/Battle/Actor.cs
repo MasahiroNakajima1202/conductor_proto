@@ -14,16 +14,16 @@ namespace Commander.Battle
         }
 
         [SerializeField]
-        BattleGroup group;
+        protected BattleGroup group;
 
         [SerializeField]
-        float WalkLimitDegree = 90.0f;
+        protected float WalkLimitDegree = 90.0f;
 
         [SerializeField]
-        float OmegaDegree = 1.0f;
+        protected float OmegaDegree = 1.0f;
 
         [SerializeField]
-        float WalkdSpeed = 0.01f;
+        protected float WalkSpeed = 0.01f;
 
         public BattleGroup Group
         {
@@ -60,7 +60,7 @@ namespace Commander.Battle
             else
             {
                 ChangeRotation(toDestionation);
-                float speed = Mathf.Min(distance, WalkdSpeed);
+                float speed = Mathf.Min(distance, WalkSpeed);
 
                 // FIXME: curveを用いて調整
                 speed *= dot * dot;
