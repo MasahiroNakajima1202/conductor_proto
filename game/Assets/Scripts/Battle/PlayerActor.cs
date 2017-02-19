@@ -17,6 +17,7 @@ namespace Commander.Battle
         {
             RotateByInput();
             WalkByInput();
+            AttackByInput();
         }
 
         void RotateByInput()
@@ -55,6 +56,17 @@ namespace Commander.Battle
             Debug.Log(speed);
 
             transform.position = transform.position + front * speed;
+        }
+
+        void AttackByInput()
+        {
+            if (attackPosition == null || attackPrefab == null){ return; }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Attack attack = Instantiate(attackPrefab);
+                attack.transform.SetParent(attackPosition, false);
+            }
         }
     }
 }

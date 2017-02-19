@@ -25,6 +25,13 @@ namespace Commander.Battle
         [SerializeField]
         protected float WalkSpeed = 0.01f;
 
+        // FIXME: 設定方法はおいおい
+        [SerializeField]
+        protected Attack attackPrefab;
+
+        [SerializeField]
+        protected Transform attackPosition;
+
         public BattleGroup Group
         {
             get { return group; }
