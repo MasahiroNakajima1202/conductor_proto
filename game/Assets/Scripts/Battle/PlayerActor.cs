@@ -53,8 +53,6 @@ namespace Commander.Battle
                 speed -= WalkSpeed;
             }
 
-            Debug.Log(speed);
-
             transform.position = transform.position + front * speed;
         }
 
