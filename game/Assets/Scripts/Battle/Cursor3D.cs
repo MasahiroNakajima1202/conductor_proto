@@ -21,21 +21,25 @@ namespace Commander.Battle
         bool visible;
 
         // Use this for initialization
-        protected virtual void Awake() {
+        protected virtual void Awake()
+        {
         }
 
         // Update is called once per frame
-        protected virtual void Update() {
+        protected virtual void Update()
+        {
             visible = false;
             pointingTarget = null;
 
             CalculateHorizontalPosition();
             SearchPointingTarget();
 
-            if (pointingTarget == null) {
+            if (pointingTarget == null)
+            {
                 FixToFieldHeight();
             }
-            else {
+            else
+            {
                 FixToTarget();
             }
 
@@ -44,14 +48,16 @@ namespace Commander.Battle
             image.SetActive(visible);
         }
 
-        void CalculateHorizontalPosition() {
+        void CalculateHorizontalPosition()
+        {
             Ray ray = rayCamera.ScreenPointToRay(Input.mousePosition);
             Plane plane = new Plane(Vector3.up, player.position);
 
             float distance = 0.0f;
             bool hit = plane.Raycast(ray, out distance);
 
-            if (hit) {
+            if (hit)
+            {
                 transform.position = ray.origin + ray.direction * distance;
                 visible = true;
             }
@@ -59,10 +65,12 @@ namespace Commander.Battle
             Debug.DrawRay(ray.origin, ray.direction * 10.0f, Color.red);
         }
 
-        void FixToFieldHeight() {
+        void FixToFieldHeight()
+        {
         }
 
-        void SearchPointingTarget() {
+        void SearchPointingTarget()
+        {
             if (!visible) { return; }
 
             Vector3 origin = transform.position;
@@ -74,12 +82,14 @@ namespace Commander.Battle
             bool hit = Physics.Raycast(ray, out hitInfo, 10.0f, layer);
             Debug.DrawRay(ray.origin, ray.direction * 10.0f, Color.red);
 
-            if (hit) {
+            if (hit)
+            {
                 pointingTarget = hitInfo.transform.gameObject;
             }
         }
 
-        void FixToTarget() {
+        void FixToTarget()
+        {
             if (pointingTarget == null) { return; }
 
             Vector3 position = pointingTarget.transform.position;
@@ -87,7 +97,8 @@ namespace Commander.Battle
             transform.position = position;
         }
 
-        void UpdateRotation(){
+        void UpdateRotation()
+        {
             Quaternion rotation = Quaternion.AngleAxis(3, Vector3.up);
             image.transform.rotation = image.transform.rotation * rotation;
         }

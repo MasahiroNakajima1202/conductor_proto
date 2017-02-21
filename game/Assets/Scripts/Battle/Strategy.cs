@@ -36,6 +36,6 @@ namespace Commander.Battle.AI
         {
             action = GetComponent<BattleAction>();
             pqs = GetComponent<PointQuerySystem>();
-        } 
+        }
     }
 }

@@ -10,6 +10,9 @@ namespace Commander.Battle
         [SerializeField]
         BattleAI ai;
 
+        [SerializeField]
+        Transform defencePoint;
+
         /// <summary>
         /// 使い道ない……？
         /// </summary>
@@ -17,6 +20,17 @@ namespace Commander.Battle
         public void AttachAI(BattleAI ai)
         {
             this.ai = ai;
+        }
+
+        public override void SetDefencePosition(Vector3 position)
+        {
+            defencePoint.position = position;
+            defencePoint.SetParent(null, true);
+        }
+
+        public override void ClearDefencePosition(Vector3 position)
+        {
+            defencePoint.SetParent(transform, false);
         }
 
         // Use this for initialization

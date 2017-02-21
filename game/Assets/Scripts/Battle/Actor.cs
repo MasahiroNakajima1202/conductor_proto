@@ -37,18 +37,17 @@ namespace Commander.Battle
             get { return group; }
         }
 
-        public void Damage()
-        { }
+        public void Damage() { }
 
-        public bool IsDead()
-        { return false; }
+        public bool IsDead() { return false; }
 
         public void WalkTo()
         {
         }
 
         public void StartBattleAction()
-        { }
+        {
+        }
 
         public void WalkTo(Vector3 dest)
         {
@@ -75,6 +74,14 @@ namespace Commander.Battle
             }
         }
 
+        public virtual void SetDefencePosition(Vector3 position)
+        {
+        }
+
+        public virtual void ClearDefencePosition(Vector3 position)
+        {
+        }
+
         public Vector3 GetFrontVector()
         {
             Vector3 front = new Vector3(0.0f, 0.0f, 1.0f);
@@ -86,7 +93,8 @@ namespace Commander.Battle
         }
 
         void UpdateBattleAction()
-        { }
+        {
+        }
 
         void ChangeRotation(Vector3 destFront)
         {
