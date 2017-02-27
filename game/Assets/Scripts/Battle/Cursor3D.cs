@@ -6,7 +6,7 @@ namespace Commander.Battle
 {
     public class Cursor3D : MonoBehaviour
     {
-        static readonly float TargetHeightOffset = 0.25f;
+        static readonly float TargetHeightOffset = 0.5f;
         [SerializeField]
         Camera rayCamera;
 
@@ -16,7 +16,12 @@ namespace Commander.Battle
         [SerializeField]
         GameObject image;
 
+        [SerializeField]
+        GameObject selectImage;
+
         GameObject pointingTarget;
+
+        GameObject selectedTarget;
 
         bool visible;
 
@@ -43,9 +48,14 @@ namespace Commander.Battle
                 FixToTarget();
             }
 
+            FixSelectCursorToTarget();
+
             UpdateRotation();
 
+            SelectTarget();
+
             image.SetActive(visible);
+            selectImage.SetActive(selectedTarget != null);
         }
 
         void CalculateHorizontalPosition()
@@ -93,14 +103,49 @@ namespace Commander.Battle
             if (pointingTarget == null) { return; }
 
             Vector3 position = pointingTarget.transform.position;
-            position.y += pointingTarget.transform.position.y + TargetHeightOffset;
+            position.y += TargetHeightOffset;
             transform.position = position;
+        }
+
+        void FixSelectCursorToTarget()
+        {
+            if (selectedTarget == null) { return; }
+
+            Vector3 position = selectedTarget.transform.position;
+            position.y += TargetHeightOffset;
+            selectImage.transform.position = position;
         }
 
         void UpdateRotation()
         {
             Quaternion rotation = Quaternion.AngleAxis(3, Vector3.up);
             image.transform.rotation = image.transform.rotation * rotation;
+            selectImage.transform.rotation = selectImage.transform.rotation * rotation;
+        }
+
+        void SelectTarget()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (pointingTarget != null)
+                {
+                    selectedTarget = pointingTarget;
+                }
+                else if (selectedTarget != null)
+                {
+                    AIActor aiActor = selectedTarget.transform.parent.GetComponent<AIActor>();
+                    if (aiActor != null)
+                    {
+                        aiActor.SetDefencePosition(transform.position);
+                    }
+
+                    selectedTarget = null;
+                }
+                else
+                {
+                    selectedTarget = null;
+                }
+            }
         }
 
     }
