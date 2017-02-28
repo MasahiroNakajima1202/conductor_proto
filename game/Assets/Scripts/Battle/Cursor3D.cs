@@ -133,9 +133,11 @@ namespace Commander.Battle
                 }
                 else if (selectedTarget != null)
                 {
+                    // FIXME: 構造変えてcoliderだけはトップに来るように
                     AIActor aiActor = selectedTarget.transform.parent.GetComponent<AIActor>();
                     if (aiActor != null)
                     {
+                        // FIXME: 敵に指示出せちゃってる
                         aiActor.SetDefencePosition(transform.position);
                     }
 

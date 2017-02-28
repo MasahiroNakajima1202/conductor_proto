@@ -37,6 +37,11 @@ namespace Commander.Battle
             get { return group; }
         }
 
+        public Transform AttackPosition
+        {
+            get { return attackPosition; }
+        }
+
         public void Damage() { }
 
         public bool IsDead() { return false; }

@@ -6,7 +6,7 @@ namespace Commander.Battle
 {
     public class BattleAction : MonoBehaviour
     {
-        Actor actor;
+        protected Actor actor;
 
         public virtual void UpdateState()
         {
@@ -14,11 +14,13 @@ namespace Commander.Battle
 
         public virtual bool IsFinished()
         {
-            return false;
+            return true;
         }
 
         public virtual void Reset()
-        { }
+        {
+            actor = null;
+        }
 
         public virtual void Run(Actor actor)
         {
