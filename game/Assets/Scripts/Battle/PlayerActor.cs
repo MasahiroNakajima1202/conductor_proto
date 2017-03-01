@@ -63,7 +63,9 @@ namespace Commander.Battle
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Attack attack = Instantiate(attackPrefab);
-                attack.transform.SetParent(attackPosition, false);
+                Vector3 position = attackPosition.transform.position;
+                Vector3 direction = GetFrontVector();
+                attack.Run(position, direction);
             }
         }
     }

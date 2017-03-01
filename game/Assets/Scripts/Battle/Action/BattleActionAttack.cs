@@ -23,7 +23,7 @@ namespace Commander.Battle
             if (timeCount == WarmTime)
             {
                 Attack attack = Instantiate(attackPrefab);
-                attack.transform.SetParent(actor.AttackPosition, false);
+                attack.Run(actor.AttackPosition.transform.position, Vector3.forward);
             }
 
             timeCount++;

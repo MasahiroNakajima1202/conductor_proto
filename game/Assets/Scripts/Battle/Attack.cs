@@ -14,16 +14,28 @@ namespace Commander.Battle
 
         int timeCount;
 
-        // Use this for initialization
-        protected virtual void Awake()
+        protected bool active;
+
+        public virtual void Run(Vector3 position, Vector3 direction)
         {
             GameObject animation = Instantiate(animationPrefab).gameObject;
             animation.transform.SetParent(transform, false);
+            transform.position = position;
+
+            active = true;
+        }
+
+        // Use this for initialization
+        protected virtual void Awake()
+        {
+            
         }
 
         // Update is called once per frame
         protected virtual void Update()
         {
+            if (!active){ return; }
+
             if (timeLimit < timeCount)
             {
                 Destroy(gameObject);
