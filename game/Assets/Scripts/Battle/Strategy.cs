@@ -19,7 +19,7 @@ namespace Commander.Battle.AI
 
         public BattleAction GetBattleAction()
         {
-            return new BattleAction();
+            return action;
         }
 
         public Vector3 GetDestination()
@@ -36,6 +36,6 @@ namespace Commander.Battle.AI
         {
             action = GetComponent<BattleAction>();
             pqs = GetComponent<PointQuerySystem>();
-        } 
+        }
     }
 }

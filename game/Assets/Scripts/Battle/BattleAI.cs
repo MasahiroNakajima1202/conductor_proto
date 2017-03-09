@@ -8,6 +8,8 @@ namespace Commander.Battle.AI
 {
     public class BattleAI : MonoBehaviour
     {
+        static readonly float ActionRange = 0.5f;
+
         [SerializeField]
         AIActor owner;
 
@@ -21,6 +23,8 @@ namespace Commander.Battle.AI
 
         StrategyScorer[] ScorerArray;
 
+        bool isActing;
+
         public void LoadFromFile(string filename)
         { }
 
@@ -28,17 +32,46 @@ namespace Commander.Battle.AI
         {
             if (owner == null) { return; }
 
-            SelectStrategy();
-            UpdatePQS();
+            if (isActing)
+            {
+                BattleAction action = currentStrategy.GetBattleAction();
+                action.UpdateState();
 
-            // FIXME: 位置が近いようならアクションを取る
-            owner.WalkTo(currentStrategy.PQS.CurrentDestination);
+                if (action.IsFinished())
+                {
+                    action.Reset();
+                    isActing = false;
+                }
+            }
+            else
+            {
+                SelectStrategy();
+                UpdatePQS();
+
+                owner.WalkTo(currentStrategy.PQS.CurrentDestination);
+
+                if (ReadyToAction())
+                {
+                    isActing = true;
+                    BattleAction action = currentStrategy.GetBattleAction();
+                    action.Run(owner);
+                }
+            }
         }
 
         public bool ReadyToAction()
         {
-            // FIXME: 現在のstrategyの指す目標地点と自分の位置が一致していたらtrue
-            return false;
+            if (currentStrategy == null) { return false; }
+            if (owner == null) { return false; }
+
+            PointQuerySystem pqs = currentStrategy.PQS;
+            Vector3 targetPosition = pqs.CurrentDestination;
+            Vector3 actorPosition = owner.transform.position;
+
+            Vector3 toTarget = targetPosition - actorPosition;
+            toTarget.y = 0.0f;
+            
+            return Vector3.Dot(toTarget, toTarget) < ActionRange * ActionRange;
         }
 
         public Vector3 GetDestination()

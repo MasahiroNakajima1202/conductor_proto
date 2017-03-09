@@ -6,7 +6,7 @@ namespace Commander.Battle
 {
     public class Cursor3D : MonoBehaviour
     {
-        static readonly float TargetHeightOffset = 0.25f;
+        static readonly float TargetHeightOffset = 0.5f;
         [SerializeField]
         Camera rayCamera;
 
@@ -16,42 +16,58 @@ namespace Commander.Battle
         [SerializeField]
         GameObject image;
 
+        [SerializeField]
+        GameObject selectImage;
+
         GameObject pointingTarget;
+
+        GameObject selectedTarget;
 
         bool visible;
 
         // Use this for initialization
-        protected virtual void Awake() {
+        protected virtual void Awake()
+        {
         }
 
         // Update is called once per frame
-        protected virtual void Update() {
+        protected virtual void Update()
+        {
             visible = false;
             pointingTarget = null;
 
             CalculateHorizontalPosition();
             SearchPointingTarget();
 
-            if (pointingTarget == null) {
+            if (pointingTarget == null)
+            {
                 FixToFieldHeight();
             }
-            else {
+            else
+            {
                 FixToTarget();
             }
 
+            FixSelectCursorToTarget();
+
             UpdateRotation();
 
+            SelectTarget();
+
             image.SetActive(visible);
+            selectImage.SetActive(selectedTarget != null);
         }
 
-        void CalculateHorizontalPosition() {
+        void CalculateHorizontalPosition()
+        {
             Ray ray = rayCamera.ScreenPointToRay(Input.mousePosition);
             Plane plane = new Plane(Vector3.up, player.position);
 
             float distance = 0.0f;
             bool hit = plane.Raycast(ray, out distance);
 
-            if (hit) {
+            if (hit)
+            {
                 transform.position = ray.origin + ray.direction * distance;
                 visible = true;
             }
@@ -59,10 +75,12 @@ namespace Commander.Battle
             Debug.DrawRay(ray.origin, ray.direction * 10.0f, Color.red);
         }
 
-        void FixToFieldHeight() {
+        void FixToFieldHeight()
+        {
         }
 
-        void SearchPointingTarget() {
+        void SearchPointingTarget()
+        {
             if (!visible) { return; }
 
             Vector3 origin = transform.position;
@@ -74,22 +92,62 @@ namespace Commander.Battle
             bool hit = Physics.Raycast(ray, out hitInfo, 10.0f, layer);
             Debug.DrawRay(ray.origin, ray.direction * 10.0f, Color.red);
 
-            if (hit) {
+            if (hit)
+            {
                 pointingTarget = hitInfo.transform.gameObject;
             }
         }
 
-        void FixToTarget() {
+        void FixToTarget()
+        {
             if (pointingTarget == null) { return; }
 
             Vector3 position = pointingTarget.transform.position;
-            position.y += pointingTarget.transform.position.y + TargetHeightOffset;
+            position.y += TargetHeightOffset;
             transform.position = position;
         }
 
-        void UpdateRotation(){
+        void FixSelectCursorToTarget()
+        {
+            if (selectedTarget == null) { return; }
+
+            Vector3 position = selectedTarget.transform.position;
+            position.y += TargetHeightOffset;
+            selectImage.transform.position = position;
+        }
+
+        void UpdateRotation()
+        {
             Quaternion rotation = Quaternion.AngleAxis(3, Vector3.up);
             image.transform.rotation = image.transform.rotation * rotation;
+            selectImage.transform.rotation = selectImage.transform.rotation * rotation;
+        }
+
+        void SelectTarget()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (pointingTarget != null)
+                {
+                    selectedTarget = pointingTarget;
+                }
+                else if (selectedTarget != null)
+                {
+                    // FIXME: 構造変えてcoliderだけはトップに来るように
+                    AIActor aiActor = selectedTarget.transform.parent.GetComponent<AIActor>();
+                    if (aiActor != null)
+                    {
+                        // FIXME: 敵に指示出せちゃってる
+                        aiActor.SetDefencePosition(transform.position);
+                    }
+
+                    selectedTarget = null;
+                }
+                else
+                {
+                    selectedTarget = null;
+                }
+            }
         }
 
     }

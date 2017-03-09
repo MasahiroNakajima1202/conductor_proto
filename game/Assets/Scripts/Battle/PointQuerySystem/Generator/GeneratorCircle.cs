@@ -18,7 +18,8 @@ namespace Commander.Battle.AI
         [SerializeField]
         int rangeDivision;
 
-        public override ScoreingPoint[] Generate() {
+        public override ScoreingPoint[] Generate()
+        {
             Debug.Assert(owner != null, "[PointQuerySystem] GeneratorCircle has no owner.");
 
             // 中心点は重複しないように
