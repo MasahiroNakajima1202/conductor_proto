@@ -42,6 +42,8 @@ namespace Commander.Battle
         // Update is called once per frame
         protected override void Update()
         {
+            base.Update();
+
             if (ai != null)
             {
                 ai.UpdateState();

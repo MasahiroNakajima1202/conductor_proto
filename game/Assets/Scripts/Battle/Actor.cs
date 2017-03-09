@@ -39,6 +39,14 @@ namespace Commander.Battle
         [SerializeField]
         protected Transform attackPosition;
 
+        [SerializeField]
+        int attackLatency = 10;
+
+        [SerializeField]
+        int attackTimeLength = 30;
+
+        int attackTimeCount;
+
         protected State state = State.Idle;
 
         public BattleGroup Group
@@ -65,6 +73,7 @@ namespace Commander.Battle
 
         public void WalkTo(Vector3 dest)
         {
+            if (state == State.Attack) { return; }
             Vector3 front = GetFrontVector();
             Vector3 toDestionation = dest - transform.position;
             toDestionation.y = 0.0f;
@@ -106,8 +115,33 @@ namespace Commander.Battle
             return front;
         }
 
+        protected void Attack()
+        {
+            if (state == State.Attack) { return; }
+
+            attackTimeCount = 0;
+            SetState(State.Attack);
+        }
+
         void UpdateBattleAction()
         {
+            if (state != State.Attack) { return; }
+
+            if (attackTimeCount >= attackTimeLength)
+            {
+                SetState(State.Idle);
+                return;
+            }
+
+            if (attackTimeCount == attackLatency)
+            {
+                Attack attack = Instantiate(attackPrefab);
+                Vector3 position = attackPosition.transform.position;
+                Vector3 direction = GetFrontVector();
+                attack.Run(position, direction);
+            }
+
+            attackTimeCount++;
         }
 
         void ChangeRotation(Vector3 destFront)
@@ -133,7 +167,7 @@ namespace Commander.Battle
         // Update is called once per frame
         protected virtual void Update()
         {
-
+            UpdateBattleAction();
         }
 
         protected void SetState(State state)
