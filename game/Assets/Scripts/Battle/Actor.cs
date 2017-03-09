@@ -13,6 +13,13 @@ namespace Commander.Battle
             Neutral,
         }
 
+        public enum State
+        {
+            Idle,
+            Walk,
+            Attack,
+        }
+
         [SerializeField]
         protected BattleGroup group;
 
@@ -31,6 +38,8 @@ namespace Commander.Battle
 
         [SerializeField]
         protected Transform attackPosition;
+
+        protected State state = State.Idle;
 
         public BattleGroup Group
         {
@@ -125,6 +134,26 @@ namespace Commander.Battle
         protected virtual void Update()
         {
 
+        }
+
+        protected void SetState(State state)
+        {
+            if (this.state == state) { return; }
+
+            this.state = state;
+
+            // animation
+            Animation animation = GetComponentInChildren<Animation>();
+            if (animation == null){ return; }
+            Dictionary<State, string> map = new Dictionary<State, string> {
+                {State.Idle, "Wait" },
+                {State.Walk, "Walk" },
+                {State.Attack, "Attack" },
+            };
+
+            string name = map[state];
+            animation.clip = animation.GetClip(name);
+            animation.Play();
         }
     }
 }
