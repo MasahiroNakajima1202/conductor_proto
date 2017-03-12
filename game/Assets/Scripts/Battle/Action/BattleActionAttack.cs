@@ -22,8 +22,7 @@ namespace Commander.Battle
 
             if (timeCount == WarmTime)
             {
-                Attack attack = Instantiate(attackPrefab);
-                attack.Run(actor.AttackPosition.transform.position, Vector3.forward);
+                actor.Attack();
             }
 
             timeCount++;

@@ -49,6 +49,8 @@ namespace Commander.Battle
 
         protected State state = State.Idle;
 
+        
+
         public BattleGroup Group
         {
             get { return group; }
@@ -115,7 +117,7 @@ namespace Commander.Battle
             return front;
         }
 
-        protected void Attack()
+        public void Attack()
         {
             if (state == State.Attack) { return; }
 
@@ -170,7 +172,7 @@ namespace Commander.Battle
             UpdateBattleAction();
         }
 
-        protected void SetState(State state)
+        public void SetState(State state)
         {
             if (this.state == state) { return; }
 
@@ -188,6 +190,11 @@ namespace Commander.Battle
             string name = map[state];
             animation.clip = animation.GetClip(name);
             animation.Play();
+        }
+
+        public State GetState()
+        {
+            return state;
         }
     }
 }
