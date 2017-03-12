@@ -43,12 +43,28 @@ namespace Commander.Battle.AI
                     isActing = false;
                 }
             }
-            else
+            else if(owner.GetState() != Actor.State.Attack)
             {
                 SelectStrategy();
                 UpdatePQS();
 
+                bool walked = false;
+                Vector3 beforePosition = owner.transform.position;
+
                 owner.WalkTo(currentStrategy.PQS.CurrentDestination);
+
+                Vector3 afterPosition = owner.transform.position;
+                Vector3 move = afterPosition - beforePosition;
+                walked = move.sqrMagnitude > (0.001f * 0.001f);
+
+                if (walked)
+                {
+                    owner.SetState(Actor.State.Walk);
+                }
+                else
+                {
+                    owner.SetState(Actor.State.Idle);
+                }
 
                 if (ReadyToAction())
                 {

@@ -13,6 +13,13 @@ namespace Commander.Battle
             Neutral,
         }
 
+        public enum State
+        {
+            Idle,
+            Walk,
+            Attack,
+        }
+
         [SerializeField]
         protected BattleGroup group;
 
@@ -31,6 +38,18 @@ namespace Commander.Battle
 
         [SerializeField]
         protected Transform attackPosition;
+
+        [SerializeField]
+        int attackLatency = 10;
+
+        [SerializeField]
+        int attackTimeLength = 30;
+
+        int attackTimeCount;
+
+        protected State state = State.Idle;
+
+        
 
         public BattleGroup Group
         {
@@ -56,6 +75,7 @@ namespace Commander.Battle
 
         public void WalkTo(Vector3 dest)
         {
+            if (state == State.Attack) { return; }
             Vector3 front = GetFrontVector();
             Vector3 toDestionation = dest - transform.position;
             toDestionation.y = 0.0f;
@@ -97,8 +117,33 @@ namespace Commander.Battle
             return front;
         }
 
+        public void Attack()
+        {
+            if (state == State.Attack) { return; }
+
+            attackTimeCount = 0;
+            SetState(State.Attack);
+        }
+
         void UpdateBattleAction()
         {
+            if (state != State.Attack) { return; }
+
+            if (attackTimeCount >= attackTimeLength)
+            {
+                SetState(State.Idle);
+                return;
+            }
+
+            if (attackTimeCount == attackLatency)
+            {
+                Attack attack = Instantiate(attackPrefab);
+                Vector3 position = attackPosition.transform.position;
+                Vector3 direction = GetFrontVector();
+                attack.Run(position, direction);
+            }
+
+            attackTimeCount++;
         }
 
         void ChangeRotation(Vector3 destFront)
@@ -124,7 +169,32 @@ namespace Commander.Battle
         // Update is called once per frame
         protected virtual void Update()
         {
+            UpdateBattleAction();
+        }
 
+        public void SetState(State state)
+        {
+            if (this.state == state) { return; }
+
+            this.state = state;
+
+            // animation
+            Animation animation = GetComponentInChildren<Animation>();
+            if (animation == null){ return; }
+            Dictionary<State, string> map = new Dictionary<State, string> {
+                {State.Idle, "Wait" },
+                {State.Walk, "Walk" },
+                {State.Attack, "Attack" },
+            };
+
+            string name = map[state];
+            animation.clip = animation.GetClip(name);
+            animation.Play();
+        }
+
+        public State GetState()
+        {
+            return state;
         }
     }
 }

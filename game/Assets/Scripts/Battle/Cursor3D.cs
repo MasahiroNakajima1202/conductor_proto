@@ -6,7 +6,7 @@ namespace Commander.Battle
 {
     public class Cursor3D : MonoBehaviour
     {
-        static readonly float TargetHeightOffset = 0.5f;
+        static readonly float TargetHeightOffset = 1.0f;
         [SerializeField]
         Camera rayCamera;
 

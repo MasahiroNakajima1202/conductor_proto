@@ -18,8 +18,11 @@ namespace Commander.Battle
 
         public virtual void Run(Vector3 position, Vector3 direction)
         {
-            GameObject animation = Instantiate(animationPrefab).gameObject;
-            animation.transform.SetParent(transform, false);
+            if (animationPrefab != null)
+            {
+                GameObject animation = Instantiate(animationPrefab).gameObject;
+                animation.transform.SetParent(transform, false);
+            }
             transform.position = position;
 
             active = true;
