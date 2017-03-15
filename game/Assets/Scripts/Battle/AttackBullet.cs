@@ -11,9 +11,9 @@ namespace Commander.Battle
 
         Vector3 velocity;
 
-        public override void Run(Vector3 position, Vector3 direction)
+        public override void Run(Vector3 position, Vector3 direction, Actor owner)
         {
-            base.Run(position, direction);
+            base.Run(position, direction, owner);
 
             velocity = direction * speed;
         }

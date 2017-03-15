@@ -113,7 +113,7 @@ namespace Commander.Battle.AI
             }
 
             // 全strategyに大して評価値を決定
-            Dictionary<Strategy, float> scoreMap = scoreMap = strategies.ToDictionary(st => st, st => 0.0f);
+            Dictionary<Strategy, float> scoreMap = strategies.ToDictionary(st => st, st => 0.0f);
             for (int i = 0; i < ScorerArray.Length; i++)
             {
                 StrategyScorer scorer = ScorerArray[i];

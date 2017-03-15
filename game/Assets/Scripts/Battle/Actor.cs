@@ -49,8 +49,6 @@ namespace Commander.Battle
 
         protected State state = State.Idle;
 
-        
-
         public BattleGroup Group
         {
             get { return group; }
@@ -140,7 +138,7 @@ namespace Commander.Battle
                 Attack attack = Instantiate(attackPrefab);
                 Vector3 position = attackPosition.transform.position;
                 Vector3 direction = GetFrontVector();
-                attack.Run(position, direction);
+                attack.Run(position, direction, this);
             }
 
             attackTimeCount++;
