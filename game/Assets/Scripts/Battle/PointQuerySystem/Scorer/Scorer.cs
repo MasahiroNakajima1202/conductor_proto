@@ -9,6 +9,9 @@ namespace Commander.Battle.AI
         [SerializeField]
         protected AIActor owner;
 
+        [SerializeField]
+        float weight = 1.0f;
+
         public ScoreingPoint[] Apply(ScoreingPoint[] pointArray)
         {
             PreProcess();
@@ -16,7 +19,7 @@ namespace Commander.Battle.AI
             for (int i = 0; i < pointArray.Length; i++)
             {
                 ScoreingPoint point = pointArray[i];
-                ApplyToPoint(point);
+                point.Score += Score(point) * weight;
             }
 
             return pointArray;
@@ -26,8 +29,9 @@ namespace Commander.Battle.AI
         {
         }
 
-        protected virtual void ApplyToPoint(ScoreingPoint point)
+        protected virtual float Score(ScoreingPoint point)
         {
+            return 0.0f;
         }
     }
 }

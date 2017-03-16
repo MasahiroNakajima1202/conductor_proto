@@ -19,10 +19,10 @@ namespace Commander.Battle.AI
         {
         }
 
-        protected override void ApplyToPoint(ScoreingPoint point)
+        protected override float Score(ScoreingPoint point)
         {
-            if (owner == null){ return; }
-            if (range <= 0.0f) { return; }
+            if (owner == null){ return 0.0f; }
+            if (range <= 0.0f) { return 0.0f; }
 
             Vector3 toPoint = point.position - target.transform.position;
             toPoint.y = 0.0f;
@@ -30,7 +30,7 @@ namespace Commander.Battle.AI
             float toPointDistance = toPoint.magnitude;
             float delta = Mathf.Abs(distance - toPointDistance);
             float score = 1.0f - Mathf.Clamp01(delta / range);
-            point.Score += score;
+            return score;
         }
     }
 }

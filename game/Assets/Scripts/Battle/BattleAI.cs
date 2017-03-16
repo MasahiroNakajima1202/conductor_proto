@@ -118,6 +118,8 @@ namespace Commander.Battle.AI
             {
                 StrategyScorer scorer = ScorerArray[i];
                 float score = scorer.Score();
+                AnimationCurve curve = scorer.Curve;
+                score = curve.Evaluate(score);
                 StrategyWeight[] weightArray = scorer.StrategyWeightArray;
                 for (int j = 0; j < weightArray.Length; j++)
                 {
@@ -128,6 +130,7 @@ namespace Commander.Battle.AI
                     }
 
                     scoreMap[weight.Strategy] += score * weight.Weight;
+                    weight.Score = score * weight.Weight;
                 }
             }
 

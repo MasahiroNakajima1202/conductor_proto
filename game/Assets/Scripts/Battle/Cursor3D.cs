@@ -7,6 +7,9 @@ namespace Commander.Battle
     public class Cursor3D : MonoBehaviour
     {
         static readonly float TargetHeightOffset = 1.0f;
+
+        static readonly float BaseRayWidth = 0.1f;
+
         [SerializeField]
         Camera rayCamera;
 
@@ -24,6 +27,8 @@ namespace Commander.Battle
         GameObject selectedTarget;
 
         bool visible;
+
+        float rayWidth;
 
         // Use this for initialization
         protected virtual void Awake()
@@ -66,6 +71,8 @@ namespace Commander.Battle
             float distance = 0.0f;
             bool hit = plane.Raycast(ray, out distance);
 
+            rayWidth = BaseRayWidth * Mathf.Sqrt(distance);
+
             if (hit)
             {
                 transform.position = ray.origin + ray.direction * distance;
@@ -89,7 +96,7 @@ namespace Commander.Battle
             RaycastHit hitInfo = new RaycastHit();
             int layerIndex = LayerMask.NameToLayer("Actor");
             int layer = 1 << (layerIndex);
-            bool hit = Physics.Raycast(ray, out hitInfo, 10.0f, layer);
+            bool hit = Physics.SphereCast(ray, rayWidth, out hitInfo, 10.0f, layer);
             Debug.DrawRay(ray.origin, ray.direction * 10.0f, Color.red);
 
             if (hit)

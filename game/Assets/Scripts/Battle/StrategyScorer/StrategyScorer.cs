@@ -10,10 +10,15 @@ namespace Commander.Battle.AI
         [SerializeField]
         StrategyWeight[] strategyWeightArray;
 
+        [SerializeField]
+        AnimationCurve curve;
+
         public StrategyWeight[] StrategyWeightArray
         {
             get { return strategyWeightArray; }
         }
+
+        public AnimationCurve Curve { get { return curve; } }
 
         public virtual float Score()
         {
@@ -29,6 +34,17 @@ namespace Commander.Battle.AI
 
         [SerializeField]
         Strategy strategy;
+
+        /// <summary>
+        /// 監視用
+        /// </summary>
+        [SerializeField]
+        float score;
+
+        public float Score {
+            get { return score; }
+            set { score = value; }
+        }
 
         public float Weight
         {

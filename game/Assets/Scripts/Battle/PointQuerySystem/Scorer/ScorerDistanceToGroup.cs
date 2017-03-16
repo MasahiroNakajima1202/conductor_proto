@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Commander.Battle.AI
 {
-    public class StrategyScorerGroupAround : StrategyScorer
+    public class ScorerDistanceToGroup : Scorer
     {
-        static readonly float ScoreMax = 1.0f;
-
         [SerializeField]
         Actor.BattleGroup targetGroup;
 
@@ -17,18 +15,22 @@ namespace Commander.Battle.AI
         [SerializeField]
         float farLimit;
 
-        public override float Score()
+        protected override void PreProcess()
+        {
+        }
+
+        protected override float Score(ScoreingPoint point)
         {
             if (nearLimit >= farLimit)
             {
                 Debug.LogError(string.Format("Error: {0} nearLimit is larger than farLimit.", gameObject.name));
                 return 0.0f;
             }
-            
+
             // find all enemy
             Actor[] actorArray = GameObject.FindObjectsOfType<Actor>();
 
-            float scoreSum = 0.0f;
+            float maxScore = 0.0f;
 
             for (int i = 0; i < actorArray.Length; i++)
             {
@@ -46,12 +48,10 @@ namespace Commander.Battle.AI
                 float distance = toTarget.magnitude;
 
                 float score = 1.0f - Mathf.Clamp01((distance - nearLimit) / (farLimit - nearLimit));
-                scoreSum += score;
+                maxScore = Mathf.Max(score, maxScore);
             }
 
-            scoreSum = Mathf.Clamp01(scoreSum / ScoreMax);
-
-            return scoreSum;
+            return maxScore;
         }
     }
 }
