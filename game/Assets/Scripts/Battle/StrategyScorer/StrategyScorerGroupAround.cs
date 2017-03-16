@@ -6,6 +6,8 @@ namespace Commander.Battle.AI
 {
     public class StrategyScorerGroupAround : StrategyScorer
     {
+        static readonly float ScoreMax = 1.0f;
+
         [SerializeField]
         Actor.BattleGroup targetGroup;
 
@@ -46,6 +48,8 @@ namespace Commander.Battle.AI
                 float score = 1.0f - Mathf.Clamp01((distance - nearLimit) / (farLimit - nearLimit));
                 scoreSum += score;
             }
+
+            scoreSum = Mathf.Clamp01(scoreSum / ScoreMax);
 
             return scoreSum;
         }
