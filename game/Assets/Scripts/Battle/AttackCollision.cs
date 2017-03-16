@@ -22,6 +22,9 @@ namespace Commander.Battle
             var attack = owner;
 
             attack.Damage(actor);
+
+            // FIXME: 計算式きちんと
+            actor.Damage(5);
         }
     }
 }

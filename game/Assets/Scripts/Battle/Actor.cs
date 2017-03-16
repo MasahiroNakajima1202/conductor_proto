@@ -45,9 +45,15 @@ namespace Commander.Battle
         [SerializeField]
         int attackTimeLength = 30;
 
+        [SerializeField]
+        int maxLife;
+
         int attackTimeCount;
 
         protected State state = State.Idle;
+
+        public int MaxLife { get { return maxLife; } }
+        public int Life { get; set; }
 
         public BattleGroup Group
         {
@@ -59,7 +65,10 @@ namespace Commander.Battle
             get { return attackPosition; }
         }
 
-        public void Damage() { }
+        public void Damage(int damage)
+        {
+            Life = Mathf.Clamp(Life - damage, 0, maxLife);
+        }
 
         public bool IsDead() { return false; }
 
@@ -161,7 +170,7 @@ namespace Commander.Battle
         // Use this for initialization
         protected virtual void Awake()
         {
-
+            Life = maxLife;
         }
 
         // Update is called once per frame
