@@ -16,9 +16,18 @@ namespace Commander.Battle
         [SerializeField]
         GameObject HPGaugePrefab;
 
+        [SerializeField]
+        DamagePopUp damagePopUpPrefab;
+
         Actor[] actors;
 
         GameObject[] hpGauges;
+
+        public void DamagePopUp(int damageValue, Vector3 position)
+        {
+            var popUp = Instantiate(damagePopUpPrefab);
+            popUp.Initialize(position, damageValue);
+        }
 
         private void Awake()
         {

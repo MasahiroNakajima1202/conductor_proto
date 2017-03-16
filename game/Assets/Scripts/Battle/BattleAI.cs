@@ -43,7 +43,7 @@ namespace Commander.Battle.AI
                     isActing = false;
                 }
             }
-            else if(owner.GetState() != Actor.State.Attack)
+            else if(owner.GetState() == Actor.State.Idle || owner.GetState() == Actor.State.Walk)
             {
                 SelectStrategy();
                 UpdatePQS();

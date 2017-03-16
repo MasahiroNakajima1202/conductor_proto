@@ -18,6 +18,7 @@ namespace Commander.Battle
             Idle,
             Walk,
             Attack,
+            Dead,
         }
 
         [SerializeField]
@@ -52,6 +53,8 @@ namespace Commander.Battle
 
         protected State state = State.Idle;
 
+        UIManager uiManager;
+
         public int MaxLife { get { return maxLife; } }
         public int Life { get; set; }
 
@@ -65,12 +68,19 @@ namespace Commander.Battle
             get { return attackPosition; }
         }
 
+        public bool IsDead { get { return state == State.Dead; } }
+
         public void Damage(int damage)
         {
             Life = Mathf.Clamp(Life - damage, 0, maxLife);
+            uiManager.DamagePopUp(damage, transform.position);
+
+            if (Life == 0)
+            {
+                Kill();
+            }
         }
 
-        public bool IsDead() { return false; }
 
         public void WalkTo()
         {
@@ -82,7 +92,7 @@ namespace Commander.Battle
 
         public void WalkTo(Vector3 dest)
         {
-            if (state == State.Attack) { return; }
+            if (state == State.Attack || state == State.Dead) { return; }
             Vector3 front = GetFrontVector();
             Vector3 toDestionation = dest - transform.position;
             toDestionation.y = 0.0f;
@@ -126,10 +136,15 @@ namespace Commander.Battle
 
         public void Attack()
         {
-            if (state == State.Attack) { return; }
+            if (state == State.Attack || state == State.Dead) { return; }
 
             attackTimeCount = 0;
             SetState(State.Attack);
+        }
+
+        public void Kill()
+        {
+            SetState(State.Dead);
         }
 
         void UpdateBattleAction()
@@ -155,6 +170,7 @@ namespace Commander.Battle
 
         void ChangeRotation(Vector3 destFront)
         {
+            if (state == State.Dead) { return; }
             Quaternion rotation = Quaternion.FromToRotation(GetFrontVector(), destFront);
             float angleDegree = Quaternion.Angle(Quaternion.identity, rotation);
             float ratio = 1.0f;
@@ -171,6 +187,9 @@ namespace Commander.Battle
         protected virtual void Awake()
         {
             Life = maxLife;
+
+            // FIXME: きちんと設計しましょ
+            uiManager = GameObject.FindObjectOfType<UIManager>();
         }
 
         // Update is called once per frame
@@ -192,6 +211,7 @@ namespace Commander.Battle
                 {State.Idle, "Wait" },
                 {State.Walk, "Walk" },
                 {State.Attack, "Attack" },
+                {State.Dead, "Dead" },
             };
 
             string name = map[state];
@@ -203,5 +223,6 @@ namespace Commander.Battle
         {
             return state;
         }
+
     }
 }

@@ -19,12 +19,11 @@ namespace Commander.Battle
             if (actorCollision == null) { return; }
 
             var actor = actorCollision.Owner;
+            if (actor.IsDead){ return; }
+
             var attack = owner;
 
             attack.Damage(actor);
-
-            // FIXME: 計算式きちんと
-            actor.Damage(5);
         }
     }
 }

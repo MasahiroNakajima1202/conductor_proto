@@ -36,7 +36,9 @@ namespace Commander.Battle
         public virtual void Damage(Actor target)
         {
             if (owner.Group == target.Group) { return; }
-            Debug.Log("めうーっ！？");
+
+            // FIXME: 計算式きちんと
+            target.Damage(5);
         }
 
         // Use this for initialization

@@ -44,6 +44,8 @@ namespace Commander.Battle
         {
             base.Update();
 
+            if (state == State.Dead) { return; }
+
             if (ai != null)
             {
                 ai.UpdateState();
