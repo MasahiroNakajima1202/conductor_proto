@@ -31,6 +31,8 @@ namespace Commander.Battle.AI
                 array[i] = new ScoreingPoint();
             }
 
+            Debug.Log(array.Length);
+
             // from inner
             array[0].position = owner.transform.position;
 

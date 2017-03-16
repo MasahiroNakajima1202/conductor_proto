@@ -93,6 +93,7 @@ namespace Commander.Battle
         public void WalkTo(Vector3 dest)
         {
             if (state == State.Attack || state == State.Dead) { return; }
+
             Vector3 front = GetFrontVector();
             Vector3 toDestionation = dest - transform.position;
             toDestionation.y = 0.0f;
@@ -101,6 +102,7 @@ namespace Commander.Battle
 
             float threshold = Mathf.Cos(WalkLimitDegree * Mathf.Deg2Rad);
             float dot = Vector3.Dot(front, toDestionation);
+
             if (dot < threshold)
             {
                 ChangeRotation(toDestionation);
