@@ -6,7 +6,7 @@ namespace Commander
 {
     public class MyDebug : MonoBehaviour
     {
-        static readonly int sphereCount = 128;
+        static readonly int sphereCount = 256;
 
         [SerializeField]
         GameObject spherePrefab;

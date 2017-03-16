@@ -13,7 +13,7 @@ namespace Commander.Battle.AI
         int radiusDivision;
 
         [SerializeField]
-        float rangePiRadian;
+        float rangeDegree;
 
         [SerializeField]
         int rangeDivision;
@@ -35,11 +35,11 @@ namespace Commander.Battle.AI
             array[0].position = owner.transform.position;
 
             float radiusStride = radius / (float)radiusDivision;
-            float rangeStride = 2.0f * rangePiRadian * Mathf.PI / (float)rangeDivision;
+            float rangeStride = 2.0f * rangeDegree * Mathf.Deg2Rad / (float)rangeDivision;
             float pointRadius = radiusStride;
             for (int radiusIndex = 1; radiusIndex <= radiusDivision; radiusIndex++)
             {
-                float pointRange = -rangePiRadian * Mathf.PI;
+                float pointRange = -rangeDegree * Mathf.Deg2Rad;
                 for (int rangeIndex = 0; rangeIndex <= rangeDivision; rangeIndex++)
                 {
                     Vector3 basePosition = owner.transform.position;
