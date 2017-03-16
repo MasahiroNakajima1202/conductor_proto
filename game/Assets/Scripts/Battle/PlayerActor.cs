@@ -9,13 +9,16 @@ namespace Commander.Battle
         // Use this for initialization
         protected override void Awake()
         {
-
+            base.Awake();
         }
 
         // Update is called once per frame
         protected override void Update()
         {
             base.Update();
+
+            if (state == State.Dead) { return; }
+
 
             RotateByInput();
             WalkByInput();
@@ -24,7 +27,7 @@ namespace Commander.Battle
 
         void RotateByInput()
         {
-            if (state == State.Attack) { return; }
+            if (state == State.Attack || state == State.Dead) { return; }
 
             float angle = 0.0f;
             if (Input.GetKey(KeyCode.D))
@@ -45,7 +48,7 @@ namespace Commander.Battle
 
         void WalkByInput()
         {
-            if (state == State.Attack) { return; }
+            if (state == State.Attack || state == State.Dead) { return; }
 
             Vector3 front = GetFrontVector();
             float speed = 0.0f;
@@ -77,6 +80,7 @@ namespace Commander.Battle
         void AttackByInput()
         {
             if (attackPosition == null || attackPrefab == null){ return; }
+            if (state == State.Dead) { return; }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {

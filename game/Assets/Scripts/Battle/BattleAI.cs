@@ -43,7 +43,7 @@ namespace Commander.Battle.AI
                     isActing = false;
                 }
             }
-            else if(owner.GetState() != Actor.State.Attack)
+            else if(owner.GetState() == Actor.State.Idle || owner.GetState() == Actor.State.Walk)
             {
                 SelectStrategy();
                 UpdatePQS();
@@ -113,7 +113,7 @@ namespace Commander.Battle.AI
             }
 
             // 全strategyに大して評価値を決定
-            Dictionary<Strategy, float> scoreMap = scoreMap = strategies.ToDictionary(st => st, st => 0.0f);
+            Dictionary<Strategy, float> scoreMap = strategies.ToDictionary(st => st, st => 0.0f);
             for (int i = 0; i < ScorerArray.Length; i++)
             {
                 StrategyScorer scorer = ScorerArray[i];

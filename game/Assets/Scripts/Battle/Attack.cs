@@ -16,7 +16,11 @@ namespace Commander.Battle
 
         protected bool active;
 
-        public virtual void Run(Vector3 position, Vector3 direction)
+        Actor owner;
+
+        public Actor Owner { get { return owner; } }
+
+        public virtual void Run(Vector3 position, Vector3 direction, Actor owner)
         {
             if (animationPrefab != null)
             {
@@ -24,8 +28,17 @@ namespace Commander.Battle
                 animation.transform.SetParent(transform, false);
             }
             transform.position = position;
+            this.owner = owner;
 
             active = true;
+        }
+
+        public virtual void Damage(Actor target)
+        {
+            if (owner.Group == target.Group) { return; }
+
+            // FIXME: 計算式きちんと
+            target.Damage(5);
         }
 
         // Use this for initialization
