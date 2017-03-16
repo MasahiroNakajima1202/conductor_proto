@@ -19,12 +19,12 @@ namespace Commander.Battle.AI
         {
         }
 
-        protected override void ApplyToPoint(ScoreingPoint point)
+        protected override float Score(ScoreingPoint point)
         {
             if (nearLimit >= farLimit)
             {
                 Debug.LogError(string.Format("Error: {0} nearLimit is larger than farLimit.", gameObject.name));
-                return;
+                return 0.0f;
             }
 
             // find all enemy
@@ -51,7 +51,7 @@ namespace Commander.Battle.AI
                 maxScore = Mathf.Max(score, maxScore);
             }
 
-            point.Score += maxScore;
+            return maxScore;
         }
     }
 }
