@@ -10,6 +10,8 @@ namespace Commander.Battle.AI
     {
         static readonly float ActionRange = 0.5f;
 
+        static readonly int ActionWaitLength = 60;
+
         [SerializeField]
         AIActor owner;
 
@@ -25,8 +27,7 @@ namespace Commander.Battle.AI
 
         bool isActing;
 
-        public void LoadFromFile(string filename)
-        { }
+        int actionWaitCount;
 
         public void UpdateState()
         {
@@ -40,6 +41,7 @@ namespace Commander.Battle.AI
                 if (action.IsFinished())
                 {
                     action.Reset();
+                    action = null;
                     isActing = false;
                 }
             }
@@ -66,28 +68,21 @@ namespace Commander.Battle.AI
                     owner.SetState(Actor.State.Idle);
                 }
 
+                UpdateActionWait();
+
                 if (ReadyToAction())
                 {
                     isActing = true;
                     BattleAction action = currentStrategy.GetBattleAction();
                     action.Run(owner);
+                    actionWaitCount = 0;
                 }
             }
         }
 
         public bool ReadyToAction()
         {
-            if (currentStrategy == null) { return false; }
-            if (owner == null) { return false; }
-
-            PointQuerySystem pqs = currentStrategy.PQS;
-            Vector3 targetPosition = pqs.CurrentDestination;
-            Vector3 actorPosition = owner.transform.position;
-
-            Vector3 toTarget = targetPosition - actorPosition;
-            toTarget.y = 0.0f;
-            
-            return Vector3.Dot(toTarget, toTarget) < ActionRange * ActionRange;
+            return actionWaitCount > ActionWaitLength;
         }
 
         public Vector3 GetDestination()
@@ -166,6 +161,24 @@ namespace Commander.Battle.AI
         {
             PointQuerySystem pqs = currentStrategy.PQS;
             pqs.UpdateState();
+        }
+
+        void UpdateActionWait()
+        {
+            if (currentStrategy == null) { return; }
+            if (owner == null) { return; }
+
+            PointQuerySystem pqs = currentStrategy.PQS;
+            Vector3 targetPosition = pqs.CurrentDestination;
+            Vector3 actorPosition = owner.transform.position;
+
+            Vector3 toTarget = targetPosition - actorPosition;
+            toTarget.y = 0.0f;
+
+            if (Vector3.Dot(toTarget, toTarget) < ActionRange * ActionRange)
+            {
+                actionWaitCount++;
+            }
         }
 
         private void Awake()

@@ -170,7 +170,7 @@ namespace Commander.Battle
             attackTimeCount++;
         }
 
-        void ChangeRotation(Vector3 destFront)
+        public void ChangeRotation(Vector3 destFront)
         {
             if (state == State.Dead) { return; }
             Quaternion rotation = Quaternion.FromToRotation(GetFrontVector(), destFront);
