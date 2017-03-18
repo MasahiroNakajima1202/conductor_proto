@@ -49,6 +49,12 @@ namespace Commander.Battle
         [SerializeField]
         int maxLife;
 
+        [SerializeField]
+        int attackPower;
+
+        [SerializeField]
+        int defence;
+
         int attackTimeCount;
 
         protected State state = State.Idle;
@@ -70,10 +76,16 @@ namespace Commander.Battle
 
         public bool IsDead { get { return state == State.Dead; } }
 
+        public int AttackPower { get { return attackPower; } }
+
+        public int Defence { get { return defence; } }
+
         public void DamageWithDiffence(int damage)
         {
-            Life = Mathf.Clamp(Life - damage, 0, maxLife);
-            uiManager.DamagePopUp(damage, transform.position);
+            int defencedDamage = Mathf.Max(damage - defence, 0);
+
+            Life = Mathf.Clamp(Life - defencedDamage, 0, maxLife);
+            uiManager.DamagePopUp(defencedDamage, transform.position);
 
             if (Life == 0)
             {

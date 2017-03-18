@@ -19,9 +19,13 @@ namespace Commander.Battle
 
         protected bool active;
 
+        Vector3 direction;
+
         Actor owner;
 
         public Actor Owner { get { return owner; } }
+
+        public Vector3 Direction { get { return direction; } }
 
         public virtual void Run(Vector3 position, Vector3 direction, Actor owner)
         {
@@ -32,6 +36,10 @@ namespace Commander.Battle
             }
             transform.position = position;
             this.owner = owner;
+            this.direction = direction;
+
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, direction);
+            transform.rotation = rotation;
 
             active = true;
         }
@@ -40,9 +48,15 @@ namespace Commander.Battle
         {
             if (owner.Group == target.Group) { return; }
 
-            // FIXME: 計算式きちんと
-            int damage = attackPower;
-            target.DamageWithDiffence(damage);
+            int damage = attackPower + owner.AttackPower;
+
+            float dot = Vector3.Dot(direction, target.GetFrontVector());
+            float ratio = Mathf.Clamp01((dot + 1.0f) * 0.6f);
+            float damageRatio = Mathf.Lerp(0.5f, 1.0f, ratio);
+
+            int directionalDamage = (int)((float)damage * damageRatio);
+
+            target.DamageWithDiffence(directionalDamage);
         }
 
         // Use this for initialization
