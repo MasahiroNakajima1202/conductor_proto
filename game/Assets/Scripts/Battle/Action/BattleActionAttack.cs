@@ -10,7 +10,7 @@ namespace Commander.Battle
 
         static readonly float AttackRangeDegree = 15.0f;
 
-        static readonly float AttackRangeDistance = 2.0f;
+        static readonly float AttackRangeDistance = 1.0f;
 
         static readonly int DisableTime = 60;
 

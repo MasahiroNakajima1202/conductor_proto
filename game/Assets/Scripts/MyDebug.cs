@@ -22,6 +22,7 @@ namespace Commander
 
         public static void ShowSphere(Vector3 position, Color color)
         {
+            return;
             if (currentFrameIndex >= sphereCount)
             {
                 Debug.Log(string.Format("Too many debug spheres. {0} count", currentFrameIndex));
