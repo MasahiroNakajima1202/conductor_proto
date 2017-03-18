@@ -8,9 +8,11 @@ namespace Commander.Battle
     {
         static readonly int WarmTime = 120;
 
-        static readonly float attackRangeDegree = 15.0f;
+        static readonly float AttackRangeDegree = 15.0f;
 
-        static readonly float attackRangeDistance = 2.0f;
+        static readonly float AttackRangeDistance = 2.0f;
+
+        static readonly int DisableTime = 60;
 
         [SerializeField]
         Attack attackPrefab;
@@ -30,18 +32,20 @@ namespace Commander.Battle
 
             SearchCurrentTarget();
 
-            if (!CanHitEnemy())
-            {
-                // 振り向き動作
-                TurnToTarget();
-                return;
-            }
-            else
+            if (currentTarget == null)
             {
                 UpdateDisableState();
             }
 
-            UpdateReadyToAction();
+            if (!CanHitEnemy())
+            {
+                // 振り向き動作
+                TurnToTarget();
+            }
+            else
+            {
+                UpdateReadyToAction();
+            }
         }
 
         public override bool IsFinished()
@@ -54,7 +58,7 @@ namespace Commander.Battle
             base.Reset();
             isRunning = false;
             timeCount = 0;
-            
+            disableTimeCount = 0;
         }
 
         public override void Run(Actor actor)
@@ -67,6 +71,7 @@ namespace Commander.Battle
 
         void SearchCurrentTarget()
         {
+            currentTarget = null;
             var targets = FindObjectsOfType<Actor>();
             for (int i = 0; i < targets.Length; i++)
             {
@@ -78,7 +83,7 @@ namespace Commander.Battle
 
                 float distance = toTarget.sqrMagnitude;
 
-                if (distance < attackRangeDistance * attackRangeDistance)
+                if (distance < AttackRangeDistance * AttackRangeDistance)
                 {
                     currentTarget = target;
                     break;
@@ -99,7 +104,7 @@ namespace Commander.Battle
             Vector3 front = actor.GetFrontVector();
 
             float dot = Vector3.Dot(front, toTarget);
-            float threshold = Mathf.Cos(attackRangeDegree * Mathf.Deg2Rad);
+            float threshold = Mathf.Cos(AttackRangeDegree * Mathf.Deg2Rad);
 
             return dot > threshold;
         }
@@ -115,7 +120,12 @@ namespace Commander.Battle
 
         void UpdateDisableState()
         {
-            // kokokara
+            if (disableTimeCount == DisableTime)
+            {
+                timeCount = WarmTime + 1;
+            }
+
+            disableTimeCount++;
         }
 
         void UpdateReadyToAction()
