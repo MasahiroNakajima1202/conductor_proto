@@ -12,6 +12,9 @@ namespace Commander.Battle
         [SerializeField]
         int timeLimit;
 
+        [SerializeField]
+        int attackPower;
+
         int timeCount;
 
         protected bool active;
@@ -38,7 +41,8 @@ namespace Commander.Battle
             if (owner.Group == target.Group) { return; }
 
             // FIXME: 計算式きちんと
-            target.Damage(5);
+            int damage = attackPower;
+            target.DamageWithDiffence(damage);
         }
 
         // Use this for initialization

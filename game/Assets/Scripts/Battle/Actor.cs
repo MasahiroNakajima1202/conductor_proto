@@ -70,7 +70,7 @@ namespace Commander.Battle
 
         public bool IsDead { get { return state == State.Dead; } }
 
-        public void Damage(int damage)
+        public void DamageWithDiffence(int damage)
         {
             Life = Mathf.Clamp(Life - damage, 0, maxLife);
             uiManager.DamagePopUp(damage, transform.position);
