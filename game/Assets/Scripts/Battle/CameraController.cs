@@ -17,11 +17,11 @@ namespace Commander.Battle
 
         private void Update()
         {
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetKey(KeyCode.E))
             {
                 destDegree = Mathf.Min(destDegree + Omega, angleRangeDegree);
             }
-            else if (Input.GetKey(KeyCode.E))
+            else if (Input.GetKey(KeyCode.Q))
             {
                 destDegree = Mathf.Max(destDegree - Omega, -angleRangeDegree);
                 destDegree -= Omega;

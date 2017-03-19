@@ -22,6 +22,9 @@ namespace Commander.Battle
         [SerializeField]
         GameObject selectImage;
 
+        [SerializeField]
+        LineRenderer line;
+
         GameObject pointingTarget;
 
         GameObject selectedTarget;
@@ -61,6 +64,8 @@ namespace Commander.Battle
 
             image.SetActive(visible);
             selectImage.SetActive(selectedTarget != null);
+
+            UpdateLine();
         }
 
         void CalculateHorizontalPosition()
@@ -101,7 +106,13 @@ namespace Commander.Battle
 
             if (hit)
             {
-                pointingTarget = hitInfo.transform.gameObject;
+                ActorCollision target = hitInfo.transform.gameObject.GetComponent<ActorCollision>();
+                if (target != null
+                    && target.Owner != null
+                    && target.Owner.Group == Actor.BattleGroup.Party)
+                {
+                    pointingTarget = target.Owner.gameObject;
+                }
             }
         }
 
@@ -147,8 +158,7 @@ namespace Commander.Battle
                 }
                 else if (selectedTarget != null)
                 {
-                    // FIXME: hierarchy構造変えてcoliderだけはトップに来るように
-                    AIActor aiActor = selectedTarget.transform.parent.GetComponent<AIActor>();
+                    AIActor aiActor = selectedTarget.GetComponent<AIActor>();
                     if (aiActor != null && aiActor.Group == Actor.BattleGroup.Party)
                     {
                         aiActor.SetDefencePosition(transform.position);
@@ -170,6 +180,23 @@ namespace Commander.Battle
                     selectedTarget = null;
                 }
             }
+        }
+
+        void UpdateLine()
+        {
+            if (line == null) { return; }
+
+            if (selectedTarget == null)
+            {
+                line.enabled = false;
+                return;
+            }
+
+            line.enabled = true;
+            Vector3 begin = selectedTarget.transform.position;
+            Vector3 end = transform.position;
+            line.SetPosition(0, begin);
+            line.SetPosition(1, end);
         }
 
     }
