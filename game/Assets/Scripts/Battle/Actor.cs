@@ -57,6 +57,7 @@ namespace Commander.Battle
 
         int attackTimeCount;
 
+        [SerializeField]
         protected State state = State.Idle;
 
         UIManager uiManager;

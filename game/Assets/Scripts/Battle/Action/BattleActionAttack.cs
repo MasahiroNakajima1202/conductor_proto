@@ -12,7 +12,7 @@ namespace Commander.Battle
 
         static readonly float AttackRangeDegree = 15.0f;
 
-        static readonly float AttackRangeDistance = 1.5f;
+        static readonly float AttackRangeDistance = 1.2f;
 
         static readonly int DisableTime = 60;
 
@@ -79,6 +79,7 @@ namespace Commander.Battle
             {
                 var target = targets[i];
                 if (actor.Group == target.Group){ continue; }
+                if (target.IsDead) { continue; }
 
                 Vector3 toTarget = target.transform.position - actor.transform.position;
                 toTarget.y = 0.0f;
