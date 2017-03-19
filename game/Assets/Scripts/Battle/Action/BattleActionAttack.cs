@@ -6,11 +6,13 @@ namespace Commander.Battle
 {
     public class BattleActionAttack : BattleAction
     {
-        static readonly int WarmTime = 120;
+        static readonly int WarmTime = 10;
+
+        static readonly int CoolTime = 60;
 
         static readonly float AttackRangeDegree = 15.0f;
 
-        static readonly float AttackRangeDistance = 1.0f;
+        static readonly float AttackRangeDistance = 1.5f;
 
         static readonly int DisableTime = 60;
 
@@ -50,7 +52,7 @@ namespace Commander.Battle
 
         public override bool IsFinished()
         {
-            return timeCount > WarmTime;
+            return timeCount > WarmTime + CoolTime;
         }
 
         public override void Reset()
@@ -122,7 +124,7 @@ namespace Commander.Battle
         {
             if (disableTimeCount == DisableTime)
             {
-                timeCount = WarmTime + 1;
+                timeCount = WarmTime + CoolTime + 1;
             }
 
             disableTimeCount++;

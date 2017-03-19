@@ -43,7 +43,7 @@ namespace Commander.Battle.AI
                 }
 
                 // 距離算出
-                Vector3 toTarget = target.transform.position - transform.position;
+                Vector3 toTarget = target.transform.position - point.position;
                 toTarget.y = 0.0f;
                 float distance = toTarget.magnitude;
 
