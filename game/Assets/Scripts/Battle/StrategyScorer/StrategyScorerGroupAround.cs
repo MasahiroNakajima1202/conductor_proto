@@ -35,10 +35,10 @@ namespace Commander.Battle.AI
                 Actor target = actorArray[i];
 
                 // 標的以外は無視
-                if (target.Group != targetGroup)
-                {
-                    continue;
-                }
+                if (target.Group != targetGroup) { continue; }
+
+                // 死んでたら飛ばす
+                if (target.IsDead) { continue; }
 
                 // 距離算出
                 Vector3 toTarget = target.transform.position - transform.position;

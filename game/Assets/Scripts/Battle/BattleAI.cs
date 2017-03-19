@@ -8,9 +8,9 @@ namespace Commander.Battle.AI
 {
     public class BattleAI : MonoBehaviour
     {
-        static readonly float ActionRange = 0.5f;
+        static readonly float ActionRange = 0.1f;
 
-        static readonly int ActionWaitLength = 60;
+        static readonly int ActionWaitLength = 120;
 
         [SerializeField]
         AIActor owner;
@@ -175,9 +175,14 @@ namespace Commander.Battle.AI
             Vector3 toTarget = targetPosition - actorPosition;
             toTarget.y = 0.0f;
 
-            if (Vector3.Dot(toTarget, toTarget) < ActionRange * ActionRange)
+            if (Vector3.Dot(toTarget, toTarget) < ActionRange * ActionRange
+                && owner.GetState() == Actor.State.Idle)
             {
                 actionWaitCount++;
+            }
+            else
+            {
+                actionWaitCount = 0;
             }
         }
 

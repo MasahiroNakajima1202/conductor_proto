@@ -109,6 +109,13 @@ namespace Commander.Battle
         {
             if (pointingTarget == null) { return; }
 
+            // 誰かの行動を指示しているときは、キャラクターを指さない
+            if (selectedTarget != null)
+            {
+                pointingTarget = null;
+                return;
+            }
+
             Vector3 position = pointingTarget.transform.position;
             position.y += TargetHeightOffset;
             transform.position = position;
@@ -140,17 +147,25 @@ namespace Commander.Battle
                 }
                 else if (selectedTarget != null)
                 {
-                    // FIXME: 構造変えてcoliderだけはトップに来るように
+                    // FIXME: hierarchy構造変えてcoliderだけはトップに来るように
                     AIActor aiActor = selectedTarget.transform.parent.GetComponent<AIActor>();
-                    if (aiActor != null)
+                    if (aiActor != null && aiActor.Group == Actor.BattleGroup.Party)
                     {
-                        // FIXME: 敵に指示出せちゃってる
                         aiActor.SetDefencePosition(transform.position);
                     }
 
                     selectedTarget = null;
                 }
                 else
+                {
+                    selectedTarget = null;
+                }
+            }
+
+            // 右クリックで解除
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (selectedTarget != null)
                 {
                     selectedTarget = null;
                 }
