@@ -164,6 +164,7 @@ namespace Commander.Battle
         void UpdateBattleAction()
         {
             if (state != State.Attack) { return; }
+            if (state == State.Dead) { return; }
 
             if (attackTimeCount >= attackTimeLength)
             {

@@ -9,7 +9,7 @@ namespace Commander.Battle.AI
         // Update is called once per frame
         void Update()
         {
-            PointQuerySystem.Clock();
+            BattleAI.Clock();
         }
     }
 }

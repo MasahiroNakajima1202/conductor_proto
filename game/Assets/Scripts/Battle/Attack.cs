@@ -15,7 +15,12 @@ namespace Commander.Battle
         [SerializeField]
         int attackPower;
 
+        [SerializeField]
+        int damageTimes;
+
         int timeCount;
+
+        int damageCount;
 
         protected bool active;
 
@@ -48,6 +53,12 @@ namespace Commander.Battle
         {
             if (owner.Group == target.Group) { return; }
 
+            if (damageCount >= damageTimes)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             int damage = attackPower + owner.AttackPower;
 
             float dot = Vector3.Dot(direction, target.GetFrontVector());
@@ -57,6 +68,8 @@ namespace Commander.Battle
             int directionalDamage = (int)((float)damage * damageRatio);
 
             target.DamageWithDiffence(directionalDamage);
+
+            damageCount++;
         }
 
         // Use this for initialization

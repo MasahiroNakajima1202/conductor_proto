@@ -12,6 +12,8 @@ namespace Commander.Battle.AI
 
         static readonly int ActionWaitLength = 120;
 
+        static readonly int Frequency = 10;
+
         [SerializeField]
         AIActor owner;
 
@@ -29,10 +31,21 @@ namespace Commander.Battle.AI
 
         int actionWaitCount;
 
+        static int idBank = 0;
+
+        static int frameCount;
+
+        int id;
+
+        public static void Clock()
+        {
+            frameCount++;
+        }
+
         public void UpdateState()
         {
             if (owner == null) { return; }
-
+            
             if (isActing)
             {
                 BattleAction action = currentStrategy.GetBattleAction();
@@ -159,6 +172,11 @@ namespace Commander.Battle.AI
 
         void UpdatePQS()
         {
+            if (frameCount > 0 && frameCount % Frequency != id % Frequency)
+            {
+                return;
+            }
+
             PointQuerySystem pqs = currentStrategy.PQS;
             pqs.UpdateState();
         }
@@ -194,6 +212,10 @@ namespace Commander.Battle.AI
             {
                 currentStrategy = strategies[0];
             }
+
+            id = idBank;
+            idBank++;
+            idBank %= 65536;
         }
     }
 }
