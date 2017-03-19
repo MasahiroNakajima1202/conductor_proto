@@ -6,6 +6,8 @@ namespace Commander.Battle.AI
 {
     public class PointQuerySystem : MonoBehaviour
     {
+        static readonly int Frequency = 10;
+
         [SerializeField]
         Generator generator;
 
@@ -17,8 +19,30 @@ namespace Commander.Battle.AI
 
         public Vector3 CurrentDestination { get; private set; }
 
+        int id;
+
+        ScoreingPoint[] currentArray;
+
+        int targetIndex;
+
+        static int idBank = 0;
+
+        static int frameCount;
+
+        public static void Clock()
+        {
+            frameCount++;
+        }
+
         public void UpdateState()
         {
+            ShowDebugSphere();
+
+            if (frameCount % Frequency != id)
+            {
+                return;
+            }
+
             // generate phase
             if (generator == null){ return; }
 
@@ -62,17 +86,35 @@ namespace Commander.Battle.AI
                 CurrentDestination = transform.position;
             }
 
-            for (int i = 0; i < pointArray.Length; i++)
-            {
-                var point = pointArray[i];
-                Color color = new Color(point.Score, 0.0f, 1.0f - point.Score, 1.0f);
-                MyDebug.ShowSphere(point.position, color);
-            }
+            targetIndex = indexOfMax;
+            currentArray = pointArray;
         }
 
         public Vector3 GetDestination()
         {
             return CurrentDestination;
+        }
+
+        private void Awake()
+        {
+            id = idBank;
+            idBank++;
+            idBank %= 65536;
+        }
+
+        void ShowDebugSphere()
+        {
+            if (currentArray == null) { return; }
+
+            for (int i = 0; i < currentArray.Length; i++)
+            {
+                var point = currentArray[i];
+                Color color = new Color(point.Score, 0.0f, 1.0f - point.Score, 1.0f);
+                MyDebug.ShowSphere(point.position, color);
+            }
+
+            Color targetColor = Color.green;
+            MyDebug.ShowSphere(CurrentDestination, targetColor);
         }
     }
 
